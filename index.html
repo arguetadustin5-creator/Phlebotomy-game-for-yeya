@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phlebotomy Certification Quiz Game</title>
+    <title>Hello Kitty Phlebotomy Study Game 🎀</title>
     <style>
         :root {
-            --bg-color: #46178f;
-            --card-bg: #ffffff;
-            --primary: #1368ce;
-            --red: #e21b3c;
-            --blue: #1368ce;
-            --yellow: #ffa602;
-            --green: #26890c;
+            --bg-color: #ffb6c1; /* Soft pink background */
+            --card-bg: #fff0f5;
+            --primary: #9370db; /* Medium purple */
+            --primary-hover: #8a2be2;
+            --red: #ff69b4;   /* Hot pink */
+            --blue: #ba55d3;  /* Orchid purple */
+            --yellow: #dda0dd; /* Plum */
+            --green: #da70d6;  /* Fuchsia/Violet */
+            --text-color: #4a2e35;
         }
 
         * {
@@ -23,8 +25,8 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #333;
+            background: linear-gradient(135deg, #ffb6c1 0%, #dda0dd 100%);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -36,9 +38,10 @@
         .game-container {
             width: 100%;
             max-width: 800px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: #ffffff;
+            border: 4px solid var(--primary);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(147, 112, 219, 0.3);
             overflow: hidden;
             padding: 24px;
             text-align: center;
@@ -50,16 +53,17 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px dashed #ffb6c1;
         }
 
         .stat-box {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #555;
-            background: #f3f3f3;
+            color: var(--primary);
+            background: #f8f0fc;
             padding: 8px 16px;
             border-radius: 20px;
+            border: 2px solid #dda0dd;
         }
 
         .question-box {
@@ -69,12 +73,13 @@
             justify-content: center;
             font-size: 1.35rem;
             font-weight: 700;
-            color: #222;
+            color: var(--text-color);
             margin-bottom: 24px;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border-left: 6px solid var(--primary);
+            background: #fff5f8;
+            border-radius: 16px;
+            border-left: 6px solid var(--red);
+            border-right: 2px solid #ffb6c1;
         }
 
         .options-grid {
@@ -92,7 +97,7 @@
 
         .option-btn {
             border: none;
-            border-radius: 10px;
+            border-radius: 14px;
             padding: 18px 15px;
             font-size: 1.05rem;
             font-weight: 600;
@@ -103,7 +108,7 @@
             align-items: center;
             justify-content: flex-start;
             text-align: left;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .option-btn:hover {
@@ -115,10 +120,10 @@
             transform: translateY(0);
         }
 
-        .btn-0 { background-color: var(--red); }
-        .btn-1 { background-color: var(--blue); }
-        .btn-2 { background-color: var(--yellow); }
-        .btn-3 { background-color: var(--green); }
+        .btn-0 { background-color: #ff69b4; } /* Hot Pink */
+        .btn-1 { background-color: #9370db; } /* Purple */
+        .btn-2 { background-color: #ba55d3; } /* Orchid */
+        .btn-3 { background-color: #da70d6; } /* Plum */
 
         .btn-icon {
             margin-right: 12px;
@@ -133,8 +138,8 @@
             min-height: 35px;
         }
 
-        .feedback.correct { color: var(--green); }
-        .feedback.incorrect { color: var(--red); }
+        .feedback.correct { color: #8a2be2; }
+        .feedback.incorrect { color: #ff1493; }
 
         .next-btn, .start-btn {
             background-color: var(--primary);
@@ -146,37 +151,45 @@
             border-radius: 30px;
             cursor: pointer;
             margin-top: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 10px rgba(147, 112, 219, 0.3);
+            transition: background-color 0.2s;
         }
 
         .next-btn:hover, .start-btn:hover {
-            background-color: #0e52a5;
+            background-color: var(--primary-hover);
         }
 
         .hidden { display: none !important; }
 
         .progress-bar {
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
+            height: 10px;
+            background: #f0e6fa;
+            border-radius: 5px;
             overflow: hidden;
             margin-bottom: 20px;
+            border: 1px solid #dda0dd;
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, #ff69b4, #9370db);
             width: 0%;
             transition: width 0.3s ease;
+        }
+
+        .bow {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
 <div class="game-container" id="start-screen">
-    <h1 style="color: var(--bg-color); margin-bottom: 15px;">🩸 Phlebotomy Kahoot Study Game</h1>
-    <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;">Test your knowledge across all 55 Phlebotomy exam questions! Choose the correct answer to earn points and keep your streak going.</p>
-    <button class="start-btn" onclick="startGame()">Start Game 🚀</button>
+    <div class="bow">🎀</div>
+    <h1 style="color: var(--primary); margin-bottom: 10px;">Hello Yeya's Phlebotomy Quiz!</h1>
+    <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;">Master all 55 Phlebotomy exam questions with randomized pink & purple cuteness! Let's get that certification! ✨</p>
+    <button class="start-btn" onclick="startGame()">Start Studying! 💖</button>
 </div>
 
 <div class="game-container hidden" id="game-screen">
@@ -194,10 +207,10 @@
     </div>
 
     <div class="options-grid" id="options-grid">
-        <button class="option-btn btn-0" onclick="checkAnswer(0)"><span class="btn-icon">▲</span> <span id="opt-0">Option 1</span></button>
-        <button class="option-btn btn-1" onclick="checkAnswer(1)"><span class="btn-icon">◆</span> <span id="opt-1">Option 2</span></button>
-        <button class="option-btn btn-2" onclick="checkAnswer(2)"><span class="btn-icon">●</span> <span id="opt-2">Option 3</span></button>
-        <button class="option-btn btn-3" onclick="checkAnswer(3)"><span class="btn-icon">■</span> <span id="opt-3">Option 4</span></button>
+        <button class="option-btn btn-0" onclick="checkAnswer(0)"><span class="btn-icon">🎀</span> <span id="opt-0">Option 1</span></button>
+        <button class="option-btn btn-1" onclick="checkAnswer(1)"><span class="btn-icon">⭐</span> <span id="opt-1">Option 2</span></button>
+        <button class="option-btn btn-2" onclick="checkAnswer(2)"><span class="btn-icon">💖</span> <span id="opt-2">Option 3</span></button>
+        <button class="option-btn btn-3" onclick="checkAnswer(3)"><span class="btn-icon">🌸</span> <span id="opt-3">Option 4</span></button>
     </div>
 
     <div class="feedback" id="feedback"></div>
@@ -205,14 +218,15 @@
 </div>
 
 <div class="game-container hidden" id="end-screen">
-    <h1 style="color: var(--green); margin-bottom: 15px;">🎉 Quiz Completed!</h1>
+    <div class="bow">🎉🎀</div>
+    <h1 style="color: var(--primary); margin-bottom: 15px;">Amazing Job, Yeya!</h1>
     <p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px;" id="final-score">Your Score: 0 / 5500</p>
-    <p style="font-size: 1.1rem; color: #555; margin-bottom: 25px;" id="final-percent">Accuracy: 0%</p>
-    <button class="start-btn" onclick="startGame()">Play Again 🔄</button>
+    <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;" id="final-percent">Accuracy: 0%</p>
+    <button class="start-btn" onclick="startGame()">Play Again (Shuffled) 🔄</button>
 </div>
 
 <script>
-const questions = [
+const baseQuestions = [
     { q: "Identify the United States Federal Government amendment that defines the responsibilities of medical laboratory personnel?", choices: ["CLIA - Clinical Laboratory Improvement Amendments", "HIPAA", "OSHA", "CLSI"], correct: 0 },
     { q: "Identify the most common bloodborne diseases diagnosed in healthcare professionals?", choices: ["Hepatitis B, Hepatitis C, HIV", "Tuberculosis, Flu, COVID-19", "Malaria, Zika, Lyme Disease", "E. coli, Salmonella, Staph"], correct: 0 },
     { q: "Identify the most likely means of contracting Hepatitis B in a healthcare setting?", choices: ["Airborne droplets", "An accidental needlestick", "Direct skin-to-skin contact", "Contaminated food"], correct: 1 },
@@ -270,11 +284,22 @@ const questions = [
     { q: "Most common venipuncture complication:", choices: ["Hematoma", "Vein collapse", "Nerve damage", "Infection"], correct: 0 }
 ];
 
+let questions = [];
 let currentIndex = 0;
 let score = 0;
 let answered = false;
 
+function shuffleArray(array) {
+    let shuffled = JSON.parse(JSON.stringify(array));
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 function startGame() {
+    questions = shuffleArray(baseQuestions);
     currentIndex = 0;
     score = 0;
     document.getElementById('start-screen').classList.add('hidden');
@@ -316,7 +341,7 @@ function checkAnswer(selectedIdx) {
     if (selectedIdx === currentQ.correct) {
         score += 100;
         document.getElementById('score-display').innerText = `Score: ${score}`;
-        document.getElementById('feedback').innerText = "✨ Correct! +100 Points";
+        document.getElementById('feedback').innerText = "💖 Correct! +100 Points ✨";
         document.getElementById('feedback').className = "feedback correct";
     } else {
         document.getElementById('feedback').innerText = `❌ Incorrect! Correct answer: ${currentQ.choices[currentQ.correct]}`;
