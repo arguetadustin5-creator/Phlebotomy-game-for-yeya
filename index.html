@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Kitty Phlebotomy Study Game 🎀</title>
+    <title>Hello Kitty Phlebotomy Order of Draw Quiz 🎀</title>
     <style>
         :root {
-            --bg-color: #ffb6c1; /* Soft pink background */
+            --bg-color: #ffb6c1;
             --card-bg: #fff0f5;
-            --primary: #9370db; /* Medium purple */
+            --primary: #9370db;
             --primary-hover: #8a2be2;
-            --red: #ff69b4;   /* Hot pink */
-            --blue: #ba55d3;  /* Orchid purple */
-            --yellow: #dda0dd; /* Plum */
-            --green: #da70d6;  /* Fuchsia/Violet */
+            --red: #ff69b4;
+            --blue: #ba55d3;
+            --yellow: #dda0dd;
+            --green: #da70d6;
             --text-color: #4a2e35;
         }
 
@@ -35,9 +35,73 @@
             padding: 15px;
         }
 
-        .game-container {
+        .main-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px;
+        }
+
+        @media (max-width: 800px) {
+            .main-wrapper {
+                flex-direction: column;
+            }
+        }
+
+        .leaderboard-card {
+            width: 280px;
+            background: #ffffff;
+            border: 4px solid var(--primary);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(147, 112, 219, 0.3);
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 800px) {
+            .leaderboard-card {
+                width: 100%;
+            }
+        }
+
+        .leaderboard-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #ffb6c1;
+            padding-bottom: 8px;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            text-align: left;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            background: #fff5f8;
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #dda0dd;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .leaderboard-item span.rank {
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .game-container {
+            flex-grow: 1;
             background: #ffffff;
             border: 4px solid var(--primary);
             border-radius: 24px;
@@ -71,7 +135,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--text-color);
             margin-bottom: 24px;
@@ -116,23 +180,15 @@
             opacity: 0.95;
         }
 
-        .option-btn:active {
-            transform: translateY(0);
-        }
+        .btn-0 { background-color: #ff69b4; }
+        .btn-1 { background-color: #9370db; }
+        .btn-2 { background-color: #ba55d3; }
+        .btn-3 { background-color: #da70d6; }
 
-        .btn-0 { background-color: #ff69b4; } /* Hot Pink */
-        .btn-1 { background-color: #9370db; } /* Purple */
-        .btn-2 { background-color: #ba55d3; } /* Orchid */
-        .btn-3 { background-color: #da70d6; } /* Plum */
-
-        .btn-icon {
-            margin-right: 12px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+        .btn-icon { margin-right: 12px; font-size: 1.2rem; }
 
         .feedback {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             margin-top: 15px;
             min-height: 35px;
@@ -152,11 +208,24 @@
             cursor: pointer;
             margin-top: 15px;
             box-shadow: 0 4px 10px rgba(147, 112, 219, 0.3);
-            transition: background-color 0.2s;
         }
 
-        .next-btn:hover, .start-btn:hover {
-            background-color: var(--primary-hover);
+        .name-input {
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 14px;
+            border: 2px solid #dda0dd;
+            margin-bottom: 15px;
+            width: 80%;
+            text-align: center;
+        }
+
+        .celebration-img {
+            max-width: 180px;
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            margin-bottom: 15px;
         }
 
         .hidden { display: none !important; }
@@ -176,117 +245,108 @@
             width: 0%;
             transition: width 0.3s ease;
         }
-
-        .bow {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
 
-<div class="game-container" id="start-screen">
-    <div class="bow">🎀</div>
-    <h1 style="color: var(--primary); margin-bottom: 10px;">Hello Yeya's Phlebotomy Quiz!</h1>
-    <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;">Master all 55 Phlebotomy exam questions with randomized pink & purple cuteness! Let's get that certification! ✨</p>
-    <button class="start-btn" onclick="startGame()">Start Studying! 💖</button>
-</div>
+<div class="main-wrapper">
 
-<div class="game-container hidden" id="game-screen">
-    <div class="header">
-        <div class="stat-box" id="question-count">Question 1/55</div>
-        <div class="stat-box" id="score-display">Score: 0</div>
-    </div>
-    
-    <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
+    <!-- Global Leaderboard Side Card -->
+    <div class="leaderboard-card">
+        <div class="leaderboard-title">🏆 Global Leaderboard</div>
+        <ul class="leaderboard-list" id="leaderboard-list">
+            <li class="leaderboard-item">Loading scores...</li>
+        </ul>
     </div>
 
-    <div class="question-box" id="question-text">
-        Question text will appear here...
+    <!-- Main Game Section -->
+    <div class="game-container" id="start-screen">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">🎀🩸</div>
+        <h1 style="color: var(--primary); margin-bottom: 10px;">Order of Draw Study Game!</h1>
+        <p style="font-size: 1rem; color: #666; margin-bottom: 20px;">Master tube colors, additives, departments, and tests based on your exact class notes!</p>
+        
+        <input type="text" id="player-name" class="name-input" placeholder="Enter your name (e.g. Yeya)" value="Yeya">
+        <br>
+        <button class="start-btn" onclick="startGame()">Start Studying! 💖</button>
     </div>
 
-    <div class="options-grid" id="options-grid">
-        <button class="option-btn btn-0" onclick="checkAnswer(0)"><span class="btn-icon">🎀</span> <span id="opt-0">Option 1</span></button>
-        <button class="option-btn btn-1" onclick="checkAnswer(1)"><span class="btn-icon">⭐</span> <span id="opt-1">Option 2</span></button>
-        <button class="option-btn btn-2" onclick="checkAnswer(2)"><span class="btn-icon">💖</span> <span id="opt-2">Option 3</span></button>
-        <button class="option-btn btn-3" onclick="checkAnswer(3)"><span class="btn-icon">🌸</span> <span id="opt-3">Option 4</span></button>
+    <div class="game-container hidden" id="game-screen">
+        <div class="header">
+            <div class="stat-box" id="question-count">Question 1/30</div>
+            <div class="stat-box" id="score-display">Score: 0</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="question-box" id="question-text">
+            Question text...
+        </div>
+
+        <div class="options-grid" id="options-grid">
+            <button class="option-btn btn-0" onclick="checkAnswer(0)"><span class="btn-icon">🎀</span> <span id="opt-0"></span></button>
+            <button class="option-btn btn-1" onclick="checkAnswer(1)"><span class="btn-icon">⭐</span> <span id="opt-1"></span></button>
+            <button class="option-btn btn-2" onclick="checkAnswer(2)"><span class="btn-icon">💖</span> <span id="opt-2"></span></button>
+            <button class="option-btn btn-3" onclick="checkAnswer(3)"><span class="btn-icon">🌸</span> <span id="opt-3"></span></button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+        <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
     </div>
 
-    <div class="feedback" id="feedback"></div>
-    <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">Next Question ➔</button>
-</div>
+    <div class="game-container hidden" id="end-screen">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a6/Hello_Kitty_logo.svg" alt="Celebration" class="celebration-img">
+        <h1 style="color: var(--primary); margin-bottom: 15px;">Study Complete! 🎉</h1>
+        <p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px;" id="final-score">Your Score: 0 / 3000</p>
+        <p style="font-size: 1.1rem; color: #666; margin-bottom: 20px;" id="final-percent">Accuracy: 0%</p>
+        <p style="font-size: 1rem; color: var(--primary); font-weight: bold; margin-bottom: 15px;" id="saving-status"></p>
+        <button class="start-btn" onclick="startGame()">Play Again (Shuffled) 🔄</button>
+    </div>
 
-<div class="game-container hidden" id="end-screen">
-    <div class="bow">🎉🎀</div>
-    <h1 style="color: var(--primary); margin-bottom: 15px;">Amazing Job, Yeya!</h1>
-    <p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px;" id="final-score">Your Score: 0 / 5500</p>
-    <p style="font-size: 1.1rem; color: #666; margin-bottom: 25px;" id="final-percent">Accuracy: 0%</p>
-    <button class="start-btn" onclick="startGame()">Play Again (Shuffled) 🔄</button>
 </div>
 
 <script>
+const BIN_ID = "6ad7d65effd5d160537d4ace";
+const MASTER_KEY = "$2a$10$bW9hX2WRYBaHj/SXAVNxHuamBD8LpfvWCDo6aCKQJoBy7IG8d/LqW";
+
 const baseQuestions = [
-    { q: "Identify the United States Federal Government amendment that defines the responsibilities of medical laboratory personnel?", choices: ["CLIA - Clinical Laboratory Improvement Amendments", "HIPAA", "OSHA", "CLSI"], correct: 0 },
-    { q: "Identify the most common bloodborne diseases diagnosed in healthcare professionals?", choices: ["Hepatitis B, Hepatitis C, HIV", "Tuberculosis, Flu, COVID-19", "Malaria, Zika, Lyme Disease", "E. coli, Salmonella, Staph"], correct: 0 },
-    { q: "Identify the most likely means of contracting Hepatitis B in a healthcare setting?", choices: ["Airborne droplets", "An accidental needlestick", "Direct skin-to-skin contact", "Contaminated food"], correct: 1 },
-    { q: "Identify the number of red blood cells in one cubic millimeter of human blood?", choices: ["1.0–2.0 mil", "2.5–3.5 mil", "RBC - 4.5–6 mil", "8.0–10.0 mil"], correct: 2 },
-    { q: "Identify the percentage of water in blood plasma?", choices: ["50%", "75%", "90%", "99%"], correct: 2 },
-    { q: "Platelet aggregation is best described as:", choices: ["Activated platelets stick to each other to form a platelet plug", "Red blood cells bursting", "White blood cells attacking bacteria", "Fibrin dissolving a clot"], correct: 0 },
-    { q: "Blood serum is best described as:", choices: ["Liquid portion of blood that remains after a blood sample has clotted", "Liquid portion with anticoagulants preserved", "Cellular component of blood", "Pure red blood cell layer"], correct: 0 },
-    { q: "Identify the drugs that are anticoagulant agents (At least 3):", choices: ["Heparin, Warfarin (Coumadin), EDTA / Aspirin", "Tylenol, Advil, Aspirin", "Amoxicillin, Penicillin, Vancomycin", "Insulin, Metformin, Synthroid"], correct: 0 },
-    { q: "Complete Blood Count (CBC) tube color:", choices: ["Light Blue", "Lavender", "Red", "Gray"], correct: 1 },
-    { q: "Glucose Tolerance Test (GTT) tube color:", choices: ["Lavender", "Gray", "Green", "Pink"], correct: 1 },
-    { q: "Prothrombin Time (PT) tube color:", choices: ["Light Blue", "Red", "Lavender", "Royal Blue"], correct: 0 },
-    { q: "Heavy Metals tube color:", choices: ["Royal Blue", "Yellow", "Green", "Gray"], correct: 0 },
-    { q: "Type and Crossmatch tube color:", choices: ["Pink", "Light Blue", "Gray", "Green"], correct: 0 },
-    { q: "Maximum penetration depth for a human infant heel stick procedure:", choices: ["1.0 mm", "2.0 mm", "3.0 mm", "4.0 mm"], correct: 1 },
-    { q: "Number of minutes a human blood specimen can sit in a separator tube before centrifugation:", choices: ["10 min", "15–20 min", "30 minimum, 60 maximum", "120 min"], correct: 2 },
-    { q: "Primary cause of hemolysis in a human blood collection specimen:", choices: ["Using too small of a needle gauge (or pulling back too fast)", "Inverting the tube 8 times", "Using a tourniquet for 30 seconds", "Warming the site"], correct: 0 },
-    { q: "Type of antiseptic used when drawing blood for a Blood Alcohol Level test:", choices: ["70% Isopropyl Alcohol", "Non-alcoholic antiseptic (e.g. Benzalkonium chloride)", "Bleach solution", "Hydrogen peroxide"], correct: 1 },
-    { q: "A reticulocyte is best described as a:", choices: ["Mature red blood cell", "An immature red blood cell", "Type of white blood cell", "Platelet fragment"], correct: 1 },
-    { q: "Lab test most affected by a human patient not fasting for 9-12 hours:", choices: ["CBC", "Triglycerides / Lipid Panel (or Glucose)", "Blood Type", "Electrolytes"], correct: 1 },
-    { q: "Lab test that requires human blood to be collected with chain of custody protocol:", choices: ["Drug screen (or Blood Alcohol Level / Forensic)", "CBC", "BMP", "TSH"], correct: 0 },
-    { q: "Blood lab test specimen that needs to be kept warm during transport:", choices: ["Cold agglutinins (or Cryoglobulins)", "Bilirubin", "Ammonia", "Lactic acid"], correct: 0 },
-    { q: "Lab test performed in the microbiology department:", choices: ["Blood cultures", "CBC", "Lipid panel", "Glucose"], correct: 0 },
-    { q: "Name of the additives in green top blood collection tubes:", choices: ["EDTA", "Sodium Citrate", "Heparin", "Sodium Fluoride"], correct: 2 },
-    { q: "Purpose of an antiglycolytic agent in human blood collection tubes:", choices: ["To prevent glycolysis (breakdown of glucose)", "To preserve red cells", "To cause rapid clotting", "To prevent hemolysis"], correct: 0 },
-    { q: "Specimen collected as an enzyme in a marble red top blood collection tube:", choices: ["Plasma", "Serum", "Whole blood", "Platelets"], correct: 1 },
-    { q: "Name of the additive in the lavender top collection tube:", choices: ["EDTA", "Heparin", "Sodium Citrate", "Silica"], correct: 0 },
-    { q: "Lab test requiring a royal blue top tube with EDTA additive:", choices: ["Trace elements, metals, Lead, Arsenic", "Routine Glucose", "Coagulation PT/PTT", "Blood cultures"], correct: 0 },
-    { q: "Human blood collection tube that will yield a serum specimen:", choices: ["Red top", "Lavender top", "Light Blue top", "Gray top"], correct: 0 },
-    { q: "Name of the additive in the light blue top blood collection tube:", choices: ["EDTA", "Sodium citrate", "Heparin", "Potassium Oxalate"], correct: 1 },
-    { q: "Human blood collection tube used for a fasting blood sugar test:", choices: ["Gray top", "Lavender top", "Red top", "Green top"], correct: 0 },
-    { q: "Human lab tests that require a purple/Lavender top blood collection tube:", choices: ["CBC, WBC, RBC", "PT / PTT", "Electrolytes", "Bilirubin"], correct: 0 },
-    { q: "Human blood component used for an electrolyte panel lab test:", choices: ["Plasma or serum", "Red blood cells only", "Platelets only", "Buffy coat"], correct: 0 },
-    { q: "When the aseptic human blood collection technique is used:", choices: ["When drawing blood cultures", "Routine CBC draw", "Infant heel stick", "Glucose check"], correct: 0 },
-    { q: "Required information on a labeled human blood specimen tube:", choices: ["Patient full name, DOB, Date & time, Phlebotomist initials", "Patient name only", "Doctor name and room number", "Date of collection only"], correct: 0 },
-    { q: "Where blood collection tubes should be labeled by the phlebotomist:", choices: ["At the patient's bedside immediately after draw", "At the lab desk later", "Before entering the patient room", "In the breakroom"], correct: 0 },
-    { q: "The ____ the needle gauge, the larger the needle bore:", choices: ["Smaller", "Larger", "Higher", "Longer"], correct: 0 },
-    { q: "Medical procedure a phlebotomist is NOT certified to complete:", choices: ["Accessing/drawing from an IV line or arterial line", "Routine venipuncture", "Capillary heel stick", "Dermal finger stick"], correct: 0 },
-    { q: "Scenario where butterfly needle procedure should NOT be used:", choices: ["Routine venipuncture on large, healthy veins", "Elderly patients with fragile veins", "Pediatric patients", "Hand vein draws"], correct: 0 },
-    { q: "Correct order of blood draw during routine venipuncture:", choices: ["Sterile/Yellow, Light Blue, Red/SST, Green, Lavender, Gray", "Gray, Lavender, Green, Red, Yellow", "Lavender, Light Blue, Red, Gray", "Red, Yellow, Gray, Green, Blue"], correct: 0 },
-    { q: "Correct angle for needle insertion during routine venipuncture:", choices: ["5 to 10 degrees", "15 to 30 degrees", "45 to 60 degrees", "90 degrees"], correct: 1 },
-    { q: "When trough drug levels are typically drawn:", choices: ["15 minutes immediately prior to next scheduled dose", "30 minutes after drug infusion", "2 hours after meals", "At bedtime"], correct: 0 },
-    { q: "Type of specimen collected when using a dermal puncture technique:", choices: ["Capillary blood", "Arterial blood", "Pure venous blood", "Lymphatic fluid"], correct: 0 },
-    { q: "Why wrap aluminum foil around a human blood specimen:", choices: ["To protect light-sensitive analytes (e.g., Bilirubin)", "To keep the tube warm", "To prevent clotting", "To speed up spinning"], correct: 0 },
-    { q: "Medical condition created by prolonged tourniquet application:", choices: ["Hemoconcentration", "Hematoma", "Hemolysis", "Syncope"], correct: 0 },
-    { q: "A winged infusion set is also referred to as a:", choices: ["Butterfly needle", "Lancet", "Syringe driver", "Vacutainer hub"], correct: 0 },
-    { q: "Lab test abbreviation that measures thyroid function:", choices: ["TSH (Thyroid Stimulating Hormone)", "PSA", "BMP", "BUN"], correct: 0 },
-    { q: "Abbreviation for Thyroid Stimulating Hormone:", choices: ["TSH", "THS", "T3T4", "STH"], correct: 0 },
-    { q: "Abbreviation for Prostate Specific Antigen:", choices: ["PSA", "PAS", "PRO", "SAG"], correct: 0 },
-    { q: "Abbreviation for Activated Clotting Time:", choices: ["ACT", "ATC", "CAT", "CLT"], correct: 0 },
-    { q: "Abbreviation for Basic Metabolic Panel:", choices: ["BMP", "BPM", "PBM", "MAP"], correct: 0 },
-    { q: "Abbreviation for Blood Urea Nitrogen:", choices: ["BUN", "BNU", "RUB", "BUR"], correct: 0 },
-    { q: "Abbreviation for Glucose Tolerance Test:", choices: ["GTT", "GTG", "TGT", "GLU"], correct: 0 },
-    { q: "Abbreviation for Antigen:", choices: ["Ag", "An", "At", "Agp"], correct: 0 },
-    { q: "Microcollection tube filled FIRST during skin puncture:", choices: ["EDTA (Lavender top)", "Red top", "Green top", "Gray top"], correct: 0 },
-    { q: "Most common venipuncture complication:", choices: ["Hematoma", "Vein collapse", "Nerve damage", "Infection"], correct: 0 }
+    { q: "Which mnemonic phrase is used to remember the Order of Draw in your notes?", choices: ["Silly / Young Little Boys Rarely Get Lovely Girls", "Some Young Ladies Read Good Books Daily", "Save Yellow Light Blue Reds Green Lavender Gray", "Send Your Lab Blood Right Guarded Always"], correct: 0 },
+    { q: "What is drawn FIRST in the Order of Draw?", choices: ["Sterile / Yellow (Aerobic, then Anaerobic)", "Light Blue", "Red Glass", "Lavender"], correct: 0 },
+    { q: "When drawing Sterile blood cultures, which bottle must be drawn FIRST?", choices: ["Aerobic first, then Anaerobic", "Anaerobic first, then Aerobic", "It does not matter", "Both drawn simultaneously"], correct: 0 },
+    { q: "What additives are inside the Sterile / Yellow blood culture tubes?", choices: ["SPS + Agar (or SPS)", "Sodium Citrate", "Lithium Heparin", "EDTA"], correct: 0 },
+    { q: "Which department receives Sterile / Yellow tubes for Blood Culture & Sensitivity (C+S) tests?", choices: ["Microbiology / Pathology", "Coagulation", "Chemistry", "Hematology"], correct: 0 },
+    { q: "What additive is in the Light Blue tube?", choices: ["Sodium Citrate", "EDTA", "Sodium Heparin", "SPS + Agar"], correct: 0 },
+    { q: "How many times should a Light Blue tube be inverted?", choices: ["3–4 times", "8–10 times", "15 times", "Do not invert"], correct: 0 },
+    { q: "Which department receives Light Blue tubes for tests like PT, PTT, INR, and D-dimer?", choices: ["Coagulation and Hematology", "Microbiology", "Chemistry", "Blood Bank"], correct: 0 },
+    { q: "What type of specimen is tested from a Light Blue tube?", choices: ["Plasma", "Serum", "Whole Blood", "Sputum"], correct: 0 },
+    { q: "In the Order of Draw, which tubes come directly after Light Blue?", choices: ["Reds (Red glass, Red plastic, SST / Gold / Marble)", "Light Green", "Lavender", "Gray"], correct: 0 },
+    { q: "What additive is inside a Red Glass tube?", choices: ["None", "Clot Activator", "Sodium Citrate", "EDTA"], correct: 0 },
+    { q: "What additives/separators are inside Red Plastic and SST (Marble/Gold) tubes?", choices: ["Clot Activator & Sep Gel", "Heparin & EDTA", "Sodium Citrate & Agar", "Potassium Oxalate"], correct: 0 },
+    { q: "Which department processes Red Glass, Red Plastic, and SST tubes?", choices: ["Chemistry", "Microbiology", "Coagulation", "Hematology"], correct: 0 },
+    { q: "What specimen type is tested from Red tubes (Red Glass, Red Plastic, SST)?", choices: ["Serum", "Plasma", "Whole Blood", "Platelet-rich Plasma"], correct: 0 },
+    { q: "Which tests are performed using Red tubes?", choices: ["Therapeutic Drug Monitoring, Cholesterol, Electrolytes, Blood Glucose", "CBC, H+H, RBC, WBC", "PT, PTT, INR, FDP", "Blood Culture & Sensitivity"], correct: 0 },
+    { q: "According to your notes, what rule applies to testing in Green tubes versus Red tubes?", choices: ["Anything that can be tested in REDS can be tested in GREENS", "REDS testing can never be done in GREENS", "GREENS can only test Whole Blood", "REDS and GREENS have identical additives"], correct: 0 },
+    { q: "What additive is in a Light Green tube?", choices: ["Lithium Heparin + Sep Gel (PST)", "Sodium Heparin", "EDTA", "Sodium Citrate"], correct: 0 },
+    { q: "How many inversions are required for Light Green tubes?", choices: ["8–10 times", "1–2 times", "3–4 times", "No inversions"], correct: 0 },
+    { q: "Which department processes Light Green and Dark Green tubes?", choices: ["Chemistry", "Hematology", "Microbiology", "Coagulation"], correct: 0 },
+    { q: "What specimen type is tested from Light Green tubes?", choices: ["Plasma (PST)", "Serum", "Whole Blood", "Buffy Coat"], correct: 0 },
+    { q: "What additive is in a Dark Green tube?", choices: ["Sodium Heparin (or Lithium Heparin)", "EDTA", "Sodium Citrate", "Sodium Fluoride"], correct: 0 },
+    { q: "Dark Green tubes with Sodium Heparin are used for sodium testing, while Lithium Heparin is used for:", choices: ["Lithium testing", "Glucose testing", "Coagulation testing", "DNA testing"], correct: 0 },
+    { q: "What additive is inside the Lavender tube?", choices: ["EDTA (or K2 EDTA)", "Sodium Citrate", "Heparin", "Sodium Fluoride"], correct: 0 },
+    { q: "How many inversions are required for a Lavender tube?", choices: ["8–10 times", "3–4 times", "1–2 times", "12–15 times"], correct: 0 },
+    { q: "Which department receives Lavender tubes?", choices: ["Hematology", "Chemistry", "Microbiology", "Coagulation"], correct: 0 },
+    { q: "What specimen type is tested from a Lavender tube?", choices: ["Whole Blood", "Serum", "Plasma", "Clotted Blood"], correct: 0 },
+    { q: "Which common tests are drawn in a Lavender tube?", choices: ["CBC, H+H (Hemoglobin + Hematocrit), RBC, WBC", "PT, PTT, INR, D-dimer", "Cholesterol, Electrolytes, Therapeutic Drug Monitoring", "BAC, GTT"], correct: 0 },
+    { q: "What additives are in the Gray tube?", choices: ["(Na) Sodium Fluoride + (K) Potassium Oxalate", "Lithium Heparin + Sep Gel", "SPS + Agar", "EDTA + Silica"], correct: 0 },
+    { q: "What function does Sodium Fluoride serve in a Gray tube according to your notes?", choices: ["Stops glycolysis -> Prevents bacterial growth", "Prevents blood clotting", "Separates serum from cells", "Activates rapid clotting"], correct: 0 },
+    { q: "Which department receives Gray tubes for GTT (Glucose Tolerance Test) and BAC (Blood Alcohol Concentration)?", choices: ["Chemistry", "Hematology", "Coagulation", "Microbiology"], correct: 0 }
 ];
 
 let questions = [];
 let currentIndex = 0;
 let score = 0;
+let playerName = "";
 let answered = false;
 
 function shuffleArray(array) {
@@ -298,10 +358,66 @@ function shuffleArray(array) {
     return shuffled;
 }
 
+async function fetchLeaderboard() {
+    try {
+        const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+            headers: { "X-Master-Key": MASTER_KEY }
+        });
+        const data = await res.json();
+        const list = data.record.leaderboard || [];
+        renderLeaderboard(list);
+        return list;
+    } catch (e) {
+        document.getElementById('leaderboard-list').innerHTML = '<li class="leaderboard-item">Error loading scores</li>';
+        return [];
+    }
+}
+
+function renderLeaderboard(list) {
+    list.sort((a, b) => b.score - a.score);
+    const ul = document.getElementById('leaderboard-list');
+    ul.innerHTML = '';
+
+    if (list.length === 0) {
+        ul.innerHTML = '<li class="leaderboard-item">No scores yet!</li>';
+        return;
+    }
+
+    list.slice(0, 10).forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'leaderboard-item';
+        li.innerHTML = `<span><span class="rank">#${index + 1}</span> ${item.name}</span><span>${item.score} pts</span>`;
+        ul.appendChild(li);
+    });
+}
+
+async function saveScoreToLeaderboard(name, newScore) {
+    document.getElementById('saving-status').innerText = "Saving score to global leaderboard...";
+    let currentList = await fetchLeaderboard();
+    currentList.push({ name: name, score: newScore, date: new Date().toLocaleDateString() });
+
+    try {
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "X-Master-Key": MASTER_KEY
+            },
+            body: JSON.stringify({ leaderboard: currentList })
+        });
+        document.getElementById('saving-status').innerText = "✨ Score updated on Live Leaderboard!";
+        renderLeaderboard(currentList);
+    } catch (e) {
+        document.getElementById('saving-status').innerText = "Error saving score.";
+    }
+}
+
 function startGame() {
+    playerName = document.getElementById('player-name').value.trim() || "Anonymous";
     questions = shuffleArray(baseQuestions);
     currentIndex = 0;
     score = 0;
+    
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('end-screen').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
@@ -335,7 +451,6 @@ function checkAnswer(selectedIdx) {
 
     const currentQ = questions[currentIndex];
     const btns = document.querySelectorAll('.option-btn');
-    
     btns.forEach(btn => btn.disabled = true);
 
     if (selectedIdx === currentQ.correct) {
@@ -344,7 +459,7 @@ function checkAnswer(selectedIdx) {
         document.getElementById('feedback').innerText = "💖 Correct! +100 Points ✨";
         document.getElementById('feedback').className = "feedback correct";
     } else {
-        document.getElementById('feedback').innerText = `❌ Incorrect! Correct answer: ${currentQ.choices[currentQ.correct]}`;
+        document.getElementById('feedback').innerText = `❌ Wrong! Correct answer: ${currentQ.choices[currentQ.correct]}`;
         document.getElementById('feedback').className = "feedback incorrect";
         btns[selectedIdx].style.opacity = '0.4';
     }
@@ -370,7 +485,12 @@ function showEndScreen() {
     
     document.getElementById('final-score').innerText = `Your Score: ${score} / ${totalPossible}`;
     document.getElementById('final-percent').innerText = `Accuracy: ${accuracy}%`;
+
+    saveScoreToLeaderboard(playerName, score);
 }
+
+// Initial fetch on page load
+fetchLeaderboard();
 </script>
 
 </body>
